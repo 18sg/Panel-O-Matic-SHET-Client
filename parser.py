@@ -32,6 +32,8 @@ def parse_button_press(binding_p, mode):
 		group = dict((e["button"], e["name"]) for e in binding_p["grouping"]["elements"][0])
 		if group_type == "any":
 			buttons = AnyButtons(group, hold, middle_switch)
+	else:
+		buttons = Buttons([], hold, middle_switch,)
 	
 	return ButtonPress(mode, buttons)
 
@@ -49,24 +51,7 @@ def parse(string):
 			
 			call = binding_p["action"]["url"]
 			args = list(binding_p["action"]["args"])
-			bindings.append(Binding(press, call, args))
+			bindings.append(Binding(press, call, args, "property" in binding_p))
 	
 	return bindings
 
-
-
-if __name__ == "__main__":
-	print parse("""
-		MUSIC {
-			0 => /test "wacky" "woot";
-			0123 => /test "wacky" "woot";
-			_^any( 0:"james"
-					, 1:"jonny"
-					, 2:"karl"
-					, 3:"matt"
-					, 4:"tom") => /shelf/copy_playlists;
-		}
-		0:1 {
-			0 => /test "wacky" "woot";
-		}
-	""")

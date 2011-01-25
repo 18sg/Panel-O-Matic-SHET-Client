@@ -2,10 +2,11 @@
 
 class Binding(object):
 	
-	def __init__(self, button_press, call, args):
+	def __init__(self, button_press, call, args, prop):
 		self.button_press = button_press
 		self.call         = call
 		self.args         = args
+		self.prop         = prop
 	
 	
 	def get_call(self, actually_pressed):
@@ -19,6 +20,7 @@ class Binding(object):
 	
 	
 	def __repr__(self):
-		return "Binding(%s, %s, %s)"%(repr(self.button_press),
-		                              repr(self.call),
-		                              repr(self.args))
+		return "Binding(%s, %s, %s, %s)"%(repr(self.button_press),
+		                                  repr(self.call),
+		                                  repr(self.args),
+		                                  repr(self.prop))

@@ -10,16 +10,18 @@ string = QuotedString("\'") | QuotedString("\"")
 # SHET Paths/Args
 shet_url = Word("/", alphanums+"_/" )
 
-shet_arg = string
+shet_arg = string | Word(srange("[0-9]")).setParseAction(toInt)
 
-shet_action = shet_url("url") + Group(ZeroOrMore(shet_arg))("args")
+shet_action = (shet_url("url")
+               + Optional("=")("property")
+               + Group(ZeroOrMore(shet_arg))("args"))
 
 
 
 # Modifier prefixes
-hold = Optional("_")#.setParseAction(isStr("_"))
+hold = Optional("_")
 
-middle_switch = Optional("^")#.setParseAction(isStr("^"))
+middle_switch = Optional("^")
 
 
 # Buttons
@@ -35,7 +37,9 @@ button_grouping = (button_grouping_type("type")
                    + nestedExpr("(", ")",
                                 delimitedList(Group(button_names)))("elements"))
 
-buttons = button_chord("chord") | button_literal("literal") | button_grouping("grouping")
+buttons = Optional(button_chord("chord")
+                   | button_literal("literal")
+                   | button_grouping("grouping"))
 
 
 

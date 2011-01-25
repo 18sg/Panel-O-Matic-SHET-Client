@@ -15,6 +15,8 @@ class Client(ShetClient):
 		self.bindings = bindings
 		
 		self.watch_event("/livingroom/btn_pressed", self.on_btn_pressed)
+		
+		print "Button monitor started..."
 	
 	
 	def decode_mode(self, encoded):
@@ -41,5 +43,8 @@ class Client(ShetClient):
 		for binding in self.bindings:
 			if binding.is_triggered_by(press):
 				args = binding.get_call(press)
-				self.call(*args)
+				if binding.prop:
+					self.set(*args)
+				else:
+					self.call(*args)
 
