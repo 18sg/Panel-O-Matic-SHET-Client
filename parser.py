@@ -1,42 +1,72 @@
 #!/usr/bin/python
 
-from grammar import grammar
+from grammar      import Grammar
 
-parsed = grammar.parseString("""
-	MUSIC {
-		0 => /test "wacky" "woot";
-		0123 => /test "wacky" "woot";
-		_any( 0:"james"
-		    , 1:"jonny"
-		    , 2:"karl"
-		    , 3:"matt"
-		    , 4:"tom") => /shelf/copy_playlists;
-	}
-	0:1 {
-		0 => /test "wacky" "woot";
-	}
-""", parseAll = True)
+from mode         import Mode, named_modes
+from buttons      import Buttons, AnyButtons
+from button_press import ButtonPress
+from binding      import Binding
 
 
-for mode_block in parsed:
-	mode = mode_block["mode"]
-	bindings = mode_block["bindings"][0]
-	print "Mode:", mode
+def parse_mode(mode_block_p):
+	if "alias" in mode_block_p:
+		return named_modes[mode_block_p["alias"]]
+	elif "literal" in mode_block_p:
+		return Mode(*mode_block_p["literal"])
+	else:
+		raise Exception("Error parsing mode.")
+
+
+def parse_button_press(binding_p, mode):
+	hold = "hold" in binding_p
+	middle_switch = "middle_switch" in binding_p
 	
-	for binding in bindings:
-		hold = "hold" in binding
-		middle_switch = "middle_switch" in binding
-		print "\tBinding: Hold:", hold, "MS:", middle_switch
+	buttons = None
+	
+	if "chord" in binding_p:
+		buttons = Buttons(list(binding_p["chord"]), hold, middle_switch)
+	elif "literal" in binding_p:
+		buttons = Buttons([binding_p["literal"]], hold, middle_switch)
+	elif "grouping" in binding_p:
+		group_type = binding_p["grouping"]["type"]
+		group = dict((e["button"], e["name"]) for e in binding_p["grouping"]["elements"][0])
+		if group_type == "any":
+			buttons = AnyButtons(group, hold, middle_switch)
+	
+	return ButtonPress(mode, buttons)
+
+
+def parse(string):
+	parsed = Grammar.parseString(string, parseAll = True)
+	
+	bindings = []
+	
+	for mode_block_p in parsed:
+		mode = parse_mode(mode_block_p)
 		
-		print "\t\tCall:", binding["action"]["url"]
-		for arg in binding["action"]["args"]:
-			print "\t\t\t", arg
-		
-		if "chord" in binding:
-			print "\t\tChord", list(binding["chord"])
-		elif "literal" in binding:
-			print "\t\tLiteral", binding["literal"]
-		elif "grouping" in binding:
-			group_type = binding["grouping"]["type"]
-			group = dict((e["button"], e["name"]) for e in binding["grouping"]["elements"][0])
-			print "\t\tGrouping", group_type, group
+		for binding_p in mode_block_p["bindings"][0]:
+			press = parse_button_press(binding_p, mode)
+			
+			call = binding_p["action"]["url"]
+			args = list(binding_p["action"]["args"])
+			bindings.append(Binding(press, call, args))
+	
+	return bindings
+
+
+
+if __name__ == "__main__":
+	print parse("""
+		MUSIC {
+			0 => /test "wacky" "woot";
+			0123 => /test "wacky" "woot";
+			_^any( 0:"james"
+					, 1:"jonny"
+					, 2:"karl"
+					, 3:"matt"
+					, 4:"tom") => /shelf/copy_playlists;
+		}
+		0:1 {
+			0 => /test "wacky" "woot";
+		}
+	""")

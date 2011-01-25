@@ -51,18 +51,18 @@ binding = (hold("hold") + middle_switch("middle_switch")
 # Mode Blocks
 mode_alias = Word(srange("[A-Z_]"))
 
-mode_literal = Group(Word(srange("[0-9]"))("type")
+mode_literal = Group(Word(srange("[0-9]"))("type").setParseAction(toInt)
                      + Literal(":").suppress()
-                     + Word(srange("[0-9]"))("mode"))
+                     + Word(srange("[0-9]"))("mode").setParseAction(toInt))
 
 mode = mode_alias("alias") | mode_literal("literal")
 
 
-mode_block = (mode("mode")
+mode_block = (mode
               + nestedExpr("{", "}", OneOrMore(Group(binding)))("bindings"))
 
 
 
-grammar = OneOrMore(Group(mode_block)).ignore(cStyleComment)
+Grammar = OneOrMore(Group(mode_block)).ignore(cStyleComment)
 
 
