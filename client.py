@@ -14,7 +14,7 @@ class Client(ShetClient):
 		
 		self.bindings = bindings
 		
-		self.watch_event("/livingroom/btn_pressed", self.on_btn_pressed)
+		self.watch_event("/lounge/arduino/btn_pressed", self.on_btn_pressed)
 		
 		print "Button monitor started..."
 	
