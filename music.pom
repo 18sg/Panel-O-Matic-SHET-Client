@@ -1,0 +1,22 @@
+MUSIC {
+	/* Standard buttons */
+	0 => /shelf/mpd/volume "+10";
+	1 => /shelf/mpd/volume "-10";
+	2 => /shelf/mpd/toggle;
+	3 => /shelf/mpd/prev;
+	4 => /shelf/mpd/next;
+	
+	/* Playlist copying buttons. Allows any combination of the given buttons in
+	 * one press. The first argument will be a list of the names assigned or the
+	 * string representing that button type.
+	 */
+	_any( 0:"james"
+	    , 1:"jonny"
+	    , 2:"karl"
+	    , 3:"matt"
+	    , 4:"tom") => /shelf/copy_playlists;
+	
+	/* Setting properties. */
+	_^ => /livingroom/light_lounge = 0;
+	_^2 => /livingroom/light_lounge = 1;
+}
