@@ -17,6 +17,12 @@ class Buttons(object):
 		return "Buttons(%s, %s, %s)"%(repr(self.chord),
 		                              repr(self.hold),
 		                              repr(self.middle_switch))
+	
+	
+	def __eq__(self, other):
+		return (self.chord == other.chord
+		        and self.hold == other.hold
+		        and self.middle_switch == other.middle_switch)
 
 
 
@@ -29,15 +35,19 @@ class AnyButtons(Buttons):
 	
 	def get_inferred_arguments(self, actually_pressed):
 		args = [self.any_of[btn] for btn in filter((lambda btn: btn in self.any_of),
-		                                           actually_pressed)]
+		                                           actually_pressed.buttons.chord)]
 		return args
 	
 	
 	def __eq__(self, other):
 		try:
-			return self.any_of == other.any_of
+			match = self.any_of == other.any_of
 		except AttributeError:
-			return set(other.chord).issubset(set(self.any_of.iterkeys()))
+			match = set(other.chord).issubset(set(self.any_of.iterkeys()))
+		
+		return (match
+		        and self.hold == other.hold
+		        and self.middle_switch == other.middle_switch)
 	
 	
 	def __repr__(self):
