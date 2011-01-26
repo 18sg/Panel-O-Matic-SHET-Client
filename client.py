@@ -80,10 +80,13 @@ class Client(ShetClient):
 		for binding in self.bindings:
 			if binding.is_triggered_by(press):
 				args = binding.get_call(press)
-				if binding.prop:
-					self.set(*args)
-				else:
-					self.call(*args)
+				try:
+					if binding.prop:
+						self.set(*args)
+					else:
+						self.call(*args)
+				except Exception, e:
+					print e
 
 
 
