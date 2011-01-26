@@ -25,4 +25,10 @@ named_modes = {
 	"MUSIC"   : Mode(1, 0),
 	"BROWSER" : Mode(1, 1),
 	"WASHING" : Mode(1, 2),
+	
+	"JAMES"   : Mode(2, 0),
+	"JONATHAN": Mode(2, 1),
+	"KARL"    : Mode(2, 2),
+	"MATT"    : Mode(2, 3),
+	"TOM"     : Mode(2, 4),
 }
