@@ -44,6 +44,8 @@ Five bindings are configured:
  * Pressing middle-switch and 1 will call /some/lights.
  * Holding middle-switch and 1 will call /some/music.
 
+Advanced Chording
+-----------------
 
 If desired, you can set up a binding where the combination of buttons pressed
 will be sent to the action as its first argument as a list::
@@ -58,7 +60,9 @@ will be sent to the action as its first argument as a list::
 
 Here if any of the keys 0-4 are pressed either on their own or in tandem,
 /some/action will be called with a list containing the word associated with each
-button that was pressed, then "arg2" as the 2nd argument.
+button that was pressed, then "arg2" as the 2nd argument. For example if 0, 1
+and 4 were pressed together, the call would be to /some/action ["james",
+"jonathan", "tom"] "arg2".
 
 This can be combined with the _ and ^ symbols to require use of the
 middle-switch or holding the buttons down.
