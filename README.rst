@@ -23,10 +23,10 @@ parsed.
 The basic format consists of several blocks like so::
 
 	MUSIC {
-		0 => /some/action;
-		34 => /some/property = 1;
-		_2 => /some/action "arg!";
-		^1 => /some/lights;
+		0   => /some/action;
+		34  => /some/property = 1;
+		_2  => /some/action "arg!";
+		^1  => /some/lights;
 		_^1 => /some/music;
 	}
 
@@ -37,12 +37,12 @@ mode button on the button panel.
 
 Five bindings are configured:
 
- * The first button when pressed normally will call /some/action in shet.
- * The 3rd and 4th buttons when pressed simulatneously will set /some/property
-   to 1.
- * Holding the 2nd button will call /some/action with the argument "arg!".
- * Pressing middle-switch and 1 will call /some/lights.
- * Holding middle-switch and 1 will call /some/music.
+* The first button when pressed normally will call /some/action in shet.
+* The 3rd and 4th buttons when pressed simulatneously will set /some/property
+  to 1.
+* Holding the 2nd button will call /some/action with the argument "arg!".
+* Pressing middle-switch and 1 will call /some/lights.
+* Holding middle-switch and 1 will call /some/music.
 
 Advanced Chording
 -----------------
