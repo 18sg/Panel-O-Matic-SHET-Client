@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import os, sys
+import os, os.path, sys
 
 from twisted.internet import reactor
 from twisted.internet import inotify
@@ -36,14 +36,15 @@ class Client(ShetClient):
 	
 	def notify(self, notifier, filepath, mask):
 		if filepath.path.endswith(".pom"):
+			print "\033[2J" # Clear the screen
 			self.load_bindings()
-			print ""
 	
 	
 	def load_bindings(self):
 		bindings = []
 		for file in filter((lambda n: n.endswith(".pom")),
 		                   os.listdir(self.bindings_dir)):
+			file = os.path.join(self.bindings_dir, file)
 			try:
 				print "Reading %s"%file,
 				bindings += parse(open(file, "r").read())
