@@ -17,6 +17,7 @@ from button_press import ButtonPress
 class Client(ShetClient):
 	
 	def __init__(self, bindings_dir, *args, **kwargs):
+		
 		ShetClient.__init__(self, *args, **kwargs)
 		
 		self.bindings_dir = bindings_dir
@@ -29,7 +30,7 @@ class Client(ShetClient):
 		self.notifier.watch(filepath.FilePath(self.bindings_dir),
 		                    callbacks = [self.notify])
 		
-		self.watch_event("/lounge/arduino/btn_pressed", self.on_btn_pressed)
+		self.watch_event("/lounge/panel/pressed", self.on_btn_pressed)
 		
 		print "Button monitor started..."
 	
@@ -56,25 +57,10 @@ class Client(ShetClient):
 		print "Done loading bindings."
 	
 	
-	def decode_mode(self, encoded):
-		return Mode(encoded & 0b11, encoded >> 2)
-	
-	
-	def decode_buttons(self, encoded, hold_e, middle_switch_e):
-		return Buttons(filter((lambda n: bool((encoded>>n) & 0b1)),
-		                      range(5)),
-		               bool(hold_e),
-		               bool(middle_switch_e))
-	
-	
-	def on_btn_pressed(self, encoded):
-		mode_e          = encoded >> 7
-		buttons_e       = encoded & 0b11111
-		hold_e          = (encoded >> 5) & 0b1
-		middle_switch_e = (encoded >> 6) & 0b1
-		
-		mode    = self.decode_mode(mode_e)
-		buttons = self.decode_buttons(buttons_e, hold_e, middle_switch_e)
+	def on_btn_pressed(self, data):
+		mode_data, button_data = data
+		mode    = Mode(*mode_data)
+		buttons = Buttons(*button_data)
 		press   = ButtonPress(mode, buttons)
 		
 		for binding in self.bindings:
