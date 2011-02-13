@@ -24,7 +24,9 @@ class Mode(object):
 named_modes = {
 	"MUSIC"   : Mode(1, 0),
 	"BROWSER" : Mode(1, 1),
-	"WASHING" : Mode(1, 2),
+	"IRC"     : Mode(1, 2),
+	"WASHING" : Mode(1, 3),
+	"XMONAD"  : Mode(1, 4),
 	
 	"JAMES"   : Mode(2, 0),
 	"JONATHAN": Mode(2, 1),
